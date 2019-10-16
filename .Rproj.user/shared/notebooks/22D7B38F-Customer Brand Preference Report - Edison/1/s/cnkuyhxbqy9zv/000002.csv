@@ -1,0 +1,7 @@
+"0","set.seed(123)"
+"0","DecisionTree_brand <- ctree(brand ~ ., data = CompleteResponses, controls = ctree_control(maxdepth = 3))"
+"0","plot(DecisionTree_brand)"
+"2","
+"
+"2","
+"

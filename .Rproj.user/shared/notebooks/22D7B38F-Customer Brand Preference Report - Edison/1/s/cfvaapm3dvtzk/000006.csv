@@ -1,0 +1,3 @@
+"0",""
+"0","CompleteResponses$car <- as.factor(CompleteResponses$car)"
+"0","SurveyIncomplete$car <- as.factor(SurveyIncomplete$car)"

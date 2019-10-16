@@ -1,0 +1,7 @@
+"0","# Hist car"
+"0","CompleteResponses$car <- as.integer(CompleteResponses$car)"
+"0","SurveyIncomplete$car <- as.integer(SurveyIncomplete$car)"
+"0",""
+"0","ggplot(CompleteResponses, aes(x = car, fill = brand)) + "
+"0","  geom_histogram(binwidth = 1, color = ""white"") + "
+"0","  ggtitle(""Histogram CompleteResponse - car"")"

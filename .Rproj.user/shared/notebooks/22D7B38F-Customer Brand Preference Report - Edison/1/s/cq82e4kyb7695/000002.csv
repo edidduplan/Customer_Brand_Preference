@@ -1,0 +1,3 @@
+"0","trainSize <- createDataPartition(y=CompleteResponses$brand, p = .75, list = F)"
+"0","trainSet <- CompleteResponses[trainSize,]"
+"0","testSet <- CompleteResponses[-trainSize,]"

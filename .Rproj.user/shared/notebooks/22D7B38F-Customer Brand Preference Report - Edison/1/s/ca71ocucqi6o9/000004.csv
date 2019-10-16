@@ -1,0 +1,4 @@
+"0","ggplot(SurveyIncomplete, aes(x = credit)) + "
+"0","  geom_histogram(binwidth = 50000, color = ""white"") + "
+"0","  ggtitle(""Histogram SurveyIncomplete - credit"")"
+"0",""

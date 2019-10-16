@@ -1,0 +1,3 @@
+"0",""
+"0","CompleteResponses$elevel <- as.ordered(CompleteResponses$elevel)"
+"0","SurveyIncomplete$elevel <- as.ordered(SurveyIncomplete$elevel)"

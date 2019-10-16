@@ -1,0 +1,6 @@
+"0","ggplot(CompleteResponses, aes(x = brand, y = salary, "
+"0","                              fill = brand)) + "
+"0","  geom_boxplot() + "
+"0","  stat_summary(fun.y = median, color = ""white"", geom = ""text"","
+"0","               vjust = -0.7, "
+"0","               aes(label = round(..y.., digits = 1)))"

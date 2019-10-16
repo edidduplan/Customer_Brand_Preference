@@ -1,0 +1,3 @@
+"0",""
+"0","CompleteResponses$zipcode <- as.factor(CompleteResponses$zipcode)"
+"0","SurveyIncomplete$zipcode <- as.factor(SurveyIncomplete$zipcode)"

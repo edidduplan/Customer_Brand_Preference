@@ -1,0 +1,6 @@
+"0","# Histograms"
+"0","# Hist salary"
+"0","ggplot(CompleteResponses, aes(x = salary, fill = brand)) + "
+"0","  geom_histogram(binwidth = 10000, "
+"0","                 color = ""white"") + "
+"0","  ggtitle(""Histogram CompleteResponse - Salary"")"
