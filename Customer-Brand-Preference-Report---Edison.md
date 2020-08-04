@@ -145,7 +145,11 @@ Key:
 -   19 Toyota
 -   20 None of the above
 
-![](Customer-Brand-Preference-Report---Edison_files/figure-markdown_github/unnamed-chunk-8-1.png)![](Customer-Brand-Preference-Report---Edison_files/figure-markdown_github/unnamed-chunk-8-2.png)
+![](Customer-Brand-Preference-Report---Edison_files/figure-markdown_github/unnamed-chunk-8-1.png)
+
+    ## Warning: Ignoring unknown parameters: binwith
+
+![](Customer-Brand-Preference-Report---Edison_files/figure-markdown_github/unnamed-chunk-8-2.png)
 
 0 New England 1 Mid-Atlantic 2 East North Central 3 West North Central 4
 South Atlantic 5 East South Central 6 West South Central 7 Mountain 8
@@ -171,6 +175,8 @@ Scatter plots
 
 In order to explore deeper the relationship between the different
 attributes and brand, scatter plots have been made.
+
+    ## `geom_smooth()` using method = 'gam' and formula 'y ~ s(x, bs = "cs")'
 
 ![](Customer-Brand-Preference-Report---Edison_files/figure-markdown_github/unnamed-chunk-10-1.png)
 
@@ -236,8 +242,80 @@ automatic tunning with tunelength = 3. For the validation of models
 folds. The cross-validation results for the tunning parameters can bee
 seen below:
 
+    ## Warning: 'trials' should be <= 7 for this object. Predictions generated
+    ## using 7 trials
+
+    ## Warning: 'trials' should be <= 7 for this object. Predictions generated
+    ## using 7 trials
+
+    ## Warning: 'trials' should be <= 9 for this object. Predictions generated
+    ## using 9 trials
+
+    ## Warning: 'trials' should be <= 9 for this object. Predictions generated
+    ## using 9 trials
+
+    ## Warning: 'trials' should be <= 9 for this object. Predictions generated
+    ## using 9 trials
+
+    ## Warning: 'trials' should be <= 9 for this object. Predictions generated
+    ## using 9 trials
+
+    ## Warning: 'trials' should be <= 5 for this object. Predictions generated
+    ## using 5 trials
+
+    ## Warning: 'trials' should be <= 5 for this object. Predictions generated
+    ## using 5 trials
+
+    ## Warning: 'trials' should be <= 5 for this object. Predictions generated
+    ## using 5 trials
+
+    ## Warning: 'trials' should be <= 5 for this object. Predictions generated
+    ## using 5 trials
+
+    ## Warning: 'trials' should be <= 7 for this object. Predictions generated
+    ## using 7 trials
+
+    ## Warning: 'trials' should be <= 7 for this object. Predictions generated
+    ## using 7 trials
+
+    ## Warning: 'trials' should be <= 3 for this object. Predictions generated
+    ## using 3 trials
+
+    ## Warning: 'trials' should be <= 3 for this object. Predictions generated
+    ## using 3 trials
+
+    ## Warning: 'trials' should be <= 9 for this object. Predictions generated
+    ## using 9 trials
+
+    ## Warning: 'trials' should be <= 9 for this object. Predictions generated
+    ## using 9 trials
+
+    ## Warning: 'trials' should be <= 6 for this object. Predictions generated
+    ## using 6 trials
+
+    ## Warning: 'trials' should be <= 6 for this object. Predictions generated
+    ## using 6 trials
+
+    ## Warning: 'trials' should be <= 9 for this object. Predictions generated
+    ## using 9 trials
+
+    ## Warning: 'trials' should be <= 9 for this object. Predictions generated
+    ## using 9 trials
+
+    ## Warning: 'trials' should be <= 9 for this object. Predictions generated
+    ## using 9 trials
+
+    ## Warning: 'trials' should be <= 9 for this object. Predictions generated
+    ## using 9 trials
+
+    ## Warning: 'trials' should be <= 3 for this object. Predictions generated
+    ## using 3 trials
+
+    ## Warning: 'trials' should be <= 3 for this object. Predictions generated
+    ## using 3 trials
+
     ##    user  system elapsed 
-    ##   98.32    0.72   99.18
+    ##   97.84    0.91   99.11
 
 ``` r
 modelo_c50_auto
@@ -347,7 +425,7 @@ system.time(modelo_rf_man <- train(brand ~ .,
 ```
 
     ##    user  system elapsed 
-    ##  246.65    4.64  252.06
+    ##  246.33    4.52  251.31
 
 ### Testing the model
 
@@ -425,7 +503,7 @@ system.time(modelo_rf_auto <- train(brand ~ .,
 ```
 
     ##    user  system elapsed 
-    ##  304.86    4.29  309.81
+    ##  304.50    4.72  310.11
 
 ### Testing the model
 
