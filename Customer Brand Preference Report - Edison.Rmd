@@ -11,7 +11,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-#knitr::opts_chunk$set(echo = TRUE, cache = T, warning = F, message = F)
+knitr::opts_chunk$set(echo = TRUE, cache = T, warning = F, message = F)
 ```
 
 # Goal and Objectives
@@ -207,28 +207,29 @@ Key:
 CompleteResponses$zipcode <- as.integer(CompleteResponses$zipcode)
 SurveyIncomplete$zipcode <- as.integer(SurveyIncomplete$zipcode)
 
-ggplot(CompleteResponses, aes(x = zipcode, fill = brand)) + 
-  geom_histogram(binwidth = 1, color = "white") + 
-  ggtitle("Histogram CompleteResponse - zipcode")
+ggplot(CompleteResponses, aes(x = as.factor(zipcode), fill = brand)) + 
+  geom_bar(binwith = 1, color = "white") + 
+  ggtitle("Histogram CompleteResponse - zipcode")+ 
+  scale_x_discrete(breaks = c(1, 2, 3, 4, 5, 6, 7, 8, 9), labels = c("0", "1", "2", "3", "4", "5", "6", "7", "8"))
 
 ggplot(SurveyIncomplete, aes(x = as.factor(zipcode))) + 
   geom_bar(binwith = 1, color = "white") + 
-  ggtitle("Histogram SurveyIncomplete - zipcode") + 
-  scale_x_discrete(breaks = c(0, 1, 2, 3, 4, 5, 6, 7, 8), labels = c("a", "b", "c", "d", "e", "f", "g", "h", "i"))
+  ggtitle("Histogram SurveyIncomplete - zipcode") +
+  scale_x_discrete(breaks = c(1, 2, 3, 4, 5, 6, 7, 8, 9), labels = c("0", "1", "2", "3", "4", "5", "6", "7", "8"))
 
 CompleteResponses$zipcode <- as.factor(CompleteResponses$zipcode)
 SurveyIncomplete$zipcode <- as.factor(SurveyIncomplete$zipcode)
 ```
 
-0	New England
-1	Mid-Atlantic
-2	East North Central
-3	West North Central
-4	South Atlantic
-5	East South Central
-6	West South Central
-7	Mountain
-8	Pacific
+- 0	New England
+- 1	Mid-Atlantic
+- 2	East North Central
+- 3	West North Central
+- 4	South Atlantic
+- 5	East South Central
+- 6	West South Central
+- 7	Mountain
+- 8	Pacific
 
 ```{r, echo=F}
 str(CompleteResponses)
