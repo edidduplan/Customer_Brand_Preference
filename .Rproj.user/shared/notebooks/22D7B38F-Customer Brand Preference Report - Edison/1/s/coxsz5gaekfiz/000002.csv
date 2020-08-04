@@ -1,7 +1,0 @@
-"0","# Hist zipcode"
-"0","CompleteResponses$zipcode <- as.integer(CompleteResponses$zipcode)"
-"0","SurveyIncomplete$zipcode <- as.integer(SurveyIncomplete$zipcode)"
-"0",""
-"0","ggplot(CompleteResponses, aes(x = zipcode, fill = brand)) + "
-"0","  geom_histogram(binwidth = 1, color = ""white"") + "
-"0","  ggtitle(""Histogram CompleteResponse - zipcode"")"

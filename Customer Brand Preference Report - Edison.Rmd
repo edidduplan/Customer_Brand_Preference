@@ -3,9 +3,11 @@ title: "Brand Preference Prediction Report"
 author: "Edison Guevara"
 date: "14/10/2019"
 output: 
-    prettydoc::html_pretty:
-    theme: cayman
-    highlight: github
+  md_document:
+    variant: markdown_github
+#    prettydoc::html_pretty:
+#    theme: cayman
+#    highlight: github
 ---
 
 ```{r setup, include=FALSE}
@@ -24,23 +26,9 @@ A model is to be developed and tested in order to predict the customer's brand p
 
 The results of this report are not conclusive as to persue a strategic partnership with Sony or Acer.
 
-A new survey with a different market research company is recommended in order to validate the first survey. 
+An additional survey following a random sampling strategy is needed in order to estimate the population distribution of age and salary. In this way, the market shares of Acer and Sony can be better assessed.
 
-By exploring the current data and looking at some plots, results not consired realist have been found:
-
-- There is a very similar ammount of data points in the whole range and for all features. 
-
-- In some ranges the clasification is absolute. For instance, in the range slaray < 40k and age < 55 100% of the customers prefer Sony.
-
-- The overall share of brand is approximately 60/40 (Sony/Acer) and this is like this for all features (except of salary) and in all ranges. 
-
-However, a model has been built on the available (reliable?) data and the brand preference has been predicted on the incomplete survey. The share of brands is (as expected) again around 60/40 being Sony the most popular.
-
-## Next steps
-
-- Hire a new market research firm in order to get more reliable data
-- Do a pre-evaluation of the date to determine whether it looks real or not.
-- Develop a new model on the more reliable data and based on the learnings from the present excercise.
+However, a model has been built on the available data and the brand preference has been predicted on the incomplete survey. The share of brands is (as expected) again around 60/40 being Sony the most popular. However, this result should be validated following a random sampling survey.
 
 # Data 
 
@@ -66,7 +54,7 @@ library(party)
 library(party)
 library(C50)
 # Setting working directory
-setwd("C:/Users/edison/Documents/Ubiqum/Data Analytics Course/Module II/Task2_revisited/")
+setwd("C:/Users/edidd/Documents/Ubiqum/Data Analytics Course/Module II/Task2_revisited/")
 
 ```
 
@@ -90,6 +78,8 @@ CompleteResponses[which(CompleteResponses$brand == 0),
                   "brand"] <- "Acer"
 CompleteResponses[which(CompleteResponses$brand == 1), 
                   "brand"] <- "Sony"
+
+# CompleteResponses[CompleteResponses$brand == 1,] <- "test"
 
 CompleteResponses$brand <- as.factor(CompleteResponses$brand)
 
@@ -152,19 +142,15 @@ Unlike while looking at salary, in the case of age there is not clear associatio
 
 ```{r, echo = F}
 # Hist elevel
-CompleteResponses$elevel <- as.integer(CompleteResponses$elevel)
-SurveyIncomplete$elevel <- as.integer(SurveyIncomplete$elevel)
-
-ggplot(CompleteResponses, aes(x = elevel, fill = brand)) + 
+str(CompleteResponses)
+ggplot(CompleteResponses, aes(x = as.integer(elevel), fill = brand)) + 
   geom_histogram(binwidth = 1, color = "white") + 
   ggtitle("Histogram CompleteResponse - education level")
 
-ggplot(SurveyIncomplete, aes(x = elevel)) + 
+ggplot(SurveyIncomplete, aes(x = as.integer(elevel))) + 
   geom_histogram(binwidth = 1, color = "white") + 
   ggtitle("Histogram SurveyIncomplete - education level")
 
-CompleteResponses$elevel <- as.ordered(CompleteResponses$elevel)
-SurveyIncomplete$elevel <- as.ordered(SurveyIncomplete$elevel)
 ```
 
 Key:
@@ -225,9 +211,10 @@ ggplot(CompleteResponses, aes(x = zipcode, fill = brand)) +
   geom_histogram(binwidth = 1, color = "white") + 
   ggtitle("Histogram CompleteResponse - zipcode")
 
-ggplot(SurveyIncomplete, aes(x = zipcode)) + 
-  geom_histogram(binwidth = 1, color = "white") + 
-  ggtitle("Histogram SurveyIncomplete - zipcode")
+ggplot(SurveyIncomplete, aes(x = as.factor(zipcode))) + 
+  geom_bar(binwith = 1, color = "white") + 
+  ggtitle("Histogram SurveyIncomplete - zipcode") + 
+  scale_x_discrete(breaks = c(0, 1, 2, 3, 4, 5, 6, 7, 8), labels = c("a", "b", "c", "d", "e", "f", "g", "h", "i"))
 
 CompleteResponses$zipcode <- as.factor(CompleteResponses$zipcode)
 SurveyIncomplete$zipcode <- as.factor(SurveyIncomplete$zipcode)
@@ -244,6 +231,8 @@ SurveyIncomplete$zipcode <- as.factor(SurveyIncomplete$zipcode)
 8	Pacific
 
 ```{r, echo=F}
+str(CompleteResponses)
+
 # Hist credit
 ggplot(CompleteResponses, aes(x = credit, fill = brand)) + 
   geom_histogram(binwidth = 50000, color = "white") + 
@@ -316,7 +305,7 @@ Two different decision tree classification methods have been included: C5.0 and 
 
 ##  Creating training and testing sets
 
-In order to train and test the models, the original data (complete data) has been split into a training and a test set. The proportion used is 0.75 to 0.25.
+In order to train and test the models, the original data (complete survey) has been split into a training and a test set. The proportion used is 0.75 to 0.25.
 
 ```{r}
 trainSize <- createDataPartition(y=CompleteResponses$brand, p = .75, list = F)
@@ -326,37 +315,37 @@ testSet <- CompleteResponses[-trainSize,]
 
 ## C5.0
 
-### Training the model
+### Hyperparameter selection with cross-validation (automatic tunning)
 
-The C5.0 model has been trained using cross-validation 10 folds, 3 repetitions, as resampling method.
-Below it can be seen the results using automatic tuning with tunelength = 2.
+Hyperparameter selection has been done with R package caret using automatic tunning with tunelength = 3. For the validation of models (hyperparameters) the data has been resampled using cross-validation 10 folds.
+The cross-validation results for the tunning parameters can bee seen below:
 
 ```{r, echo=F}
 ctrl <- trainControl(method = "repeatedcv", 
-                     repeats = 3,
+                     repeats = 1,
                      classProbs = T,
                      summaryFunction = twoClassSummary)
 
 # Automatic tunning
-modelo_c50_auto <- train(brand ~ ., 
-                data = trainSet, 
-                method = "C5.0",
-                tuneLength = 2,
-                trControl = ctrl,
-                metric = "ROC",
-                preProc = c("center", "scale"))
+system.time(modelo_c50_auto <- train(brand ~ ., 
+                         data = trainSet, 
+                         method = "C5.0",
+                         tuneLength = 3,
+                         trControl = ctrl,
+                         metric = "ROC",
+                         preProc = c("center", "scale")))
 ```
 
 ```{r}
 modelo_c50_auto
 ```
 
-ROC has been used as a criterium to select the best model since ours is a 2 class problem. ROC gives an indication of hoe well the clasification has resulted. The closer to 1 the value of ROC, the best clasified are the classes.
+ROC has been used as a criterium to select the best model since ours is a 2 class problem. ROC gives an indication of how well the clasification has resulted. The closer to 1 the value of ROC, the best clasified are the classes.
 
 ### Testing the model
 
-After training the C5.0 model on the training set, its performance has been tested on the test set.
-Below the confusion matrix for the test set can be appreciated. An accuracy of 0.9276 and a kappa of 0.8486 speak for a very good prediction.
+After selecting the hyperparameters with cross-validation on the training set, the test set is used to assess the generalization error of the selected C5.0 model. 
+Below the confusion matrix for the test set can be appreciated. An accuracy of 0.9248 and a kappa of 0.8402 speak for a very good prediction.
 
 ```{r}
 predict_c50_auto_classes <- predict(modelo_c50_auto, newdata = testSet)
@@ -366,10 +355,10 @@ confusionMatrix(data = predict_c50_auto_classes, testSet$brand)
 
 ## Random Forest
 
-### Training the model
+### Hyperparameter selection with cross-validation (manual tunning)
 
-The model Random Forest has been trained using the R package "caret". The manual tunning option has been used for the model to iterate in paramter mtry with values 1, 2 and 3. 
-10-fold cross validation and 1 repetition has been used to limit computational times.
+For the hyperparameter selection the R package caret with manual tunning has been used. Tunning has been done across parameter mtry = [1,2,3].
+10-fold cross validation and 1 repetition has been used to limit computational time.
 
 ```{r}
 rf_ctrl <- trainControl(method = "repeatedcv", 
@@ -389,22 +378,54 @@ system.time(modelo_rf_man <- train(brand ~ .,
 
 ```
 
-## Testing the model
+### Testing the model
 
-As can be seen in the cofusion matrix of the random forest model applied on the test set, accuracy (0.732) and kappa (0.3654) are much lower than the ones obtained with C5.0.
+As can be seen in the cofusion matrix of prediction on the test set using the random forest model selected in previous step, accuracy (0.75) and kappa (0.41) are much lower than the ones obtained with C5.0 and automatic hyperparameter tunning.
 
 ```{r}
 predict_rf_man_classes <- predict(modelo_rf_man, newdata = testSet)
 head(predict_rf_man_classes)
 confusionMatrix(data = predict_rf_man_classes, testSet$brand)
+postResample(predict_rf_man_classes, testSet$brand)
 ```
+
+### Hyperparameter selection with cross-validation (automatic tunning)
+
+Now the automatic grid search of caret package is used for the hyperparameter selection of random forest. Again model is validated with 10-fold cross-validation. 
+
+```{r}
+rf_ctrl <- trainControl(method = "repeatedcv", 
+                        repeats = 1,
+                        classProbs = T,
+                        summaryFunction = twoClassSummary)
+
+system.time(modelo_rf_auto <- train(brand ~ ., 
+                                    data = trainSet, 
+                                    method = "rf", 
+                                    trControl = rf_ctrl, 
+                                    tuneLength= 3,
+                                    metric = "ROC",
+                                    preProc = c("center", "scale")))
+```
+
+### Testing the model
+
+The confusion matrix of the predicted brands for the random forest selected with automatic tunning is shown below. An accuracy of 0.9232 and a kappa of 0.8362 indicate a very similar espected error as with C5.0.
+
+```{r}
+predict_rf_auto_classes <- predict(modelo_rf_auto, newdata = testSet)
+confusionMatrix(data = predict_rf_auto_classes, testSet$brand)
+postResample(predict_rf_auto_classes, testSet$brand)
+```
+
+
 
 ## Selecting the model
 
-Considering the results above, model C5.0 with automatic tunning has been selected to be the most optimal. The error metrics are:
+Considering the results above, models C5.0 and random forest, both with automatic tunning, are good models. However, model C5.0 will be selected for requiring considerably less computation time. The error metrics are:
 
-- Accuracy: 0.9276
-- Kappa: 0.8486
+- Accuracy: 0.9248 
+- Kappa: 0.8402
 
 ```{r, echo=F}
 # resamps <- resamples(list( C50= modelo_c50_auto, rf =                              modelo_rf_man))
@@ -422,4 +443,9 @@ head(SurveyIncomplete)
 summary(SurveyIncomplete)
 ```
 
-As can be seen in the summary, 59% of customer of the incomplete survey prefer Sony (2950) and 41% prefer Acer (2050)
+As can be seen in the summary, 63% of customer of the incomplete survey prefer Sony (3174) and 41% prefer Acer (1826)
+
+```{r}
+#modelLookup("rf")
+```
+

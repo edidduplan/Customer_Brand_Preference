@@ -1,4 +1,0 @@
-"0",""
-"0","ggplot(SurveyIncomplete, aes(x = elevel)) + "
-"0","  geom_histogram(binwidth = 1, color = ""white"") + "
-"0","  ggtitle(""Histogram SurveyIncomplete - education level"")"
